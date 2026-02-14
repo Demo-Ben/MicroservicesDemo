@@ -1,8 +1,6 @@
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddHttpClient("Inventory", c =>
 {
     c.BaseAddress = new Uri("https://localhost:6003");
