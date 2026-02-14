@@ -20,23 +20,27 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CreateOrderResponse>> CreateOrder(CreateOrderRequest request)
     {
-        var inventory = _clientFactory.CreateClient("Inventory");
-        var payment = _clientFactory.CreateClient("Payment");
-
+        // different name httpFactory has different base address for each service,
+        var _httpClientInventory = _clientFactory.CreateClient("Inventory");
+        var _httpClientPayment = _clientFactory.CreateClient("Payment");
 
         // test request body
-
         //{
-        //   "customerId": "22222222-2222-2222-2222-222222222222",
-        //   "items": [
-        //      {
-        //        "productId": "11111111-1111-1111-1111-111111111111",
-        //         "quantity": 2
-        //      }
-        //  ],
-        //  "totalAmount": 150,
-        //  "paymentMethod": "CreditCard"
-        //}
+        //    "customerId": "22222222-2222-2222-2222-222222222222",
+        //      "items": [
+        //        {
+        //           "productId": "11111111-1111-1111-1111-111111111111",
+        //           "quantity": 2
+        //        },
+		//        {
+        //           "productId": "22222222-2222-2222-2222-222222222222",
+        //           "quantity": 10
+        //        }
+        //      ],
+        //      "totalAmount": 150.00,
+        //      "paymentMethod": "CreditCard"
+        // }
+
 
         // 1. Reserve stock
         foreach (var item in request.Items)
@@ -47,7 +51,7 @@ public class OrdersController : ControllerBase
                 Quantity = item.Quantity
             };
 
-            var reserveRes = await inventory.PostAsJsonAsync("/api/inventory/reserve", reserveReq);
+            var reserveRes = await _httpClientInventory.PostAsJsonAsync("/api/inventory/reserve", reserveReq);
             var reserve = await reserveRes.Content.ReadFromJsonAsync<ReserveStockResponse>();
 
             if (reserve is null || !reserve.Success)
@@ -68,7 +72,7 @@ public class OrdersController : ControllerBase
             PaymentMethod = request.PaymentMethod
         };
 
-        var paymentRes = await payment.PostAsJsonAsync("/api/payment/process", paymentReq);
+        var paymentRes = await _httpClientPayment.PostAsJsonAsync("/api/payment/process", paymentReq);
         var paymentResult = await paymentRes.Content.ReadFromJsonAsync<ProcessPaymentResponse>();
 
         if (paymentResult is null || !paymentResult.Success)

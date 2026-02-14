@@ -7,10 +7,14 @@ namespace InventoryService.Controllers;
 [Route("api/[controller]")]
 public class InventoryController : ControllerBase
 {
-    private static readonly Dictionary<Guid, int> Stock = new()
-    {
-        { Guid.Parse("11111111-1111-1111-1111-111111111111"), 100 }
-    };
+    private static readonly Dictionary<Guid, int> Stock = 
+        new()
+        {
+            { Guid.Parse("11111111-1111-1111-1111-111111111111"), 100 }, 
+            { Guid.Parse("22222222-2222-2222-2222-222222222222"), 50 }, 
+            { Guid.Parse("33333333-3333-3333-3333-333333333333"), 75 }
+        };
+
 
     [HttpPost("reserve")]
     public ActionResult<ReserveStockResponse> Reserve(ReserveStockRequest request)
@@ -29,7 +33,7 @@ public class InventoryController : ControllerBase
         return Ok(new ReserveStockResponse
         {
             Success = true,
-            Message = "Stock reserved"
+            Message = "Stock reserved " + request.ProductId,
         });
     }
 }
