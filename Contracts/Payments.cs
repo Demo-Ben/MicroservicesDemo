@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Contracts.Payments;
 
-namespace Contracts.Payments;
+public class ProcessPaymentRequest
+{
+    public Guid CustomerId { get; set; }
+    public decimal Amount { get; set; }
+    public string PaymentMethod { get; set; }
+}
 
-public record ProcessPaymentRequest(
-    Guid CustomerId,
-    decimal Amount,
-    string PaymentMethod
-);
-
-public record ProcessPaymentResponse(
-    bool Success,
-    string TransactionId,
-    string Message
-);
+public class ProcessPaymentResponse
+{
+    public bool Success { get; set; }
+    public string TransactionId { get; set; }
+    public string Message { get; set; }
+}

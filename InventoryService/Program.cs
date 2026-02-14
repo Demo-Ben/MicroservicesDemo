@@ -1,36 +1,23 @@
-using Contracts.Inventory;
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Simple in-memory stock
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-var stock = new Dictionary<Guid, int>();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-// Seed some stock
-var product1 = Guid.Parse("11111111-1111-1111-1111-111111111111");
-stock[product1] = 100;
-
-app.MapPost("/api/inventory/reserve", (ReserveStockRequest request) =>
-{
-    if (!stock.TryGetValue(request.ProductId, out var currentQty) || currentQty < request.Quantity)
-    {
-        return Results.Ok(new ReserveStockResponse(false, "Insufficient stock"));
-    }
-
-    stock[request.ProductId] = currentQty - request.Quantity;
-    return Results.Ok(new ReserveStockResponse(true, "Stock reserved"));
-});
+app.MapControllers();
 
 app.Run();
+
 
 
 

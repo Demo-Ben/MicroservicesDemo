@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Contracts.Orders;
 
-namespace Contracts.Orders;
+public class CreateOrderRequest
+{
+    public Guid CustomerId { get; set; }
+    public List<OrderItemDto> Items { get; set; }
+    public decimal TotalAmount { get; set; }
+    public string PaymentMethod { get; set; }
+}
 
-public record CreateOrderRequest(
-    Guid CustomerId,
-    List<OrderItemDto> Items,
-    decimal TotalAmount,
-    string PaymentMethod
-);
+public class OrderItemDto
+{
+    public Guid ProductId { get; set; }
+    public int Quantity { get; set; }
+}
 
-public record OrderItemDto(
-    Guid ProductId,
-    int Quantity
-);
-
-public record CreateOrderResponse(
-    Guid OrderId,
-    string Status,
-    string Message
-);
+public class CreateOrderResponse
+{
+    public Guid OrderId { get; set; }
+    public string Status { get; set; }
+    public string Message { get; set; }
+}
