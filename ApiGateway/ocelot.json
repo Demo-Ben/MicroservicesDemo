@@ -1,7 +1,8 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/orders",
+      // for Downstream → what the gateway forwards to (your microservice)
+      "DownstreamPathTemplate": "/api/orders/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -9,8 +10,9 @@
           "Port": 6001
         }
       ],
-      "UpstreamPathTemplate": "/orders",
-      "UpstreamHttpMethod": [ "POST" ]
+      // for Upstream → what the client calls
+      "UpstreamPathTemplate": "/orders/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     }
   ],
   "GlobalConfiguration": {}
